@@ -194,7 +194,7 @@ if($tab == PROGRAMMES_VIEW) {
             $data[] = $link;
 
             // Output the links to this programme's courses:
-            $progcourses = $ual_mis->get_programme_courses($course->shortname);
+            $progcourses = $ual_mis->get_programme_courses($course->shortname, '', ' ORDER BY shortname ASC');
 
             if(!empty($progcourses)  && $progcourses->valid() ) {
                 $dlgId = $course->id;
@@ -334,7 +334,7 @@ if($tab == PROGRAMMES_VIEW) {
             $data[] = $link;
 
             // Output links to this course's units:
-            $courseunits = $ual_mis->get_course_units($course->shortname);
+            $courseunits = $ual_mis->get_course_units($course->shortname, '', ' ORDER BY shortname ASC');
 
             if(!empty($courseunits) && $courseunits->valid()) {
                 $dlgId = $course->id;
