@@ -168,10 +168,11 @@ if($tab == PROGRAMMES_VIEW) {
 
     $programmelist = array();
 
-    $programmelist = $ual_mis->get_programme_range($table->get_page_start(), $table->get_page_size(), $filter, $sort);
+    $totalcount = $ual_mis->get_programme_count($filter);
 
-    $totalcount = count($programmelist);
     $table->pagesize($perpage, $totalcount);
+
+    $programmelist = $ual_mis->get_programme_range($table->get_page_start(), $table->get_page_size(), $filter, $sort);
 
     if ($totalcount < 1) {
         echo $OUTPUT->heading(get_string('nothingtodisplay'));
@@ -308,10 +309,13 @@ if($tab == PROGRAMMES_VIEW) {
         $filter = ' AND visible=\'1\' AND (fullname LIKE \'%'.$search.'%\' OR shortname LIKE \'%'.$search.'%\')'; // This is not going to make for a very efficient query.
     }
 
-    $courselist = $ual_mis->get_course_range($table->get_page_start(), $table->get_page_size(), $filter, $sort);
+    $courselist = array();
 
-    $totalcount = count($courselist);
+    $totalcount = $ual_mis->get_course_count($filter);
+
     $table->pagesize($perpage, $totalcount);
+
+    $courselist = $ual_mis->get_course_range($table->get_page_start(), $table->get_page_size(), $filter, $sort);
 
     if ($totalcount < 1) {
         echo $OUTPUT->heading(get_string('nothingtodisplay'));
