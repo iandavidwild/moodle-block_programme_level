@@ -86,10 +86,11 @@ if ($isfrontpage) {
     // TODO capability check?
 }
 
-$PAGE->set_title("$course->shortname: ".get_string('display_all', 'block_course_level'));
-$PAGE->set_heading(get_string('display_all', 'block_course_level'));
+$PAGE->set_title("$course->shortname: ".get_string('display_all', 'block_programme_level'));
+$PAGE->set_heading(get_string('display_all', 'block_programme_level'));
 $PAGE->set_pagetype('course-view-' . $course->format);
 $PAGE->add_body_class('path-block-course-level-display-all'); // So we can style it independently
+$PAGE->navbar->add(get_string('display_all', 'block_programme_level'));
 
 echo $OUTPUT->header();
 
@@ -109,14 +110,14 @@ if($tab == PROGRAMMES_VIEW) {
 
     // Search
     echo '<form action="view.php" class="searchform"><div><input type="hidden" name="id" value="'.$course->id.'" /><input type="hidden" name="tab" value="'.$tab.'" />';
-    echo '<label for="search">' . get_string('programmesearch', 'block_course_level') . ' </label>';
+    echo '<label for="search">' . get_string('programmesearch', 'block_programme_level') . ' </label>';
     echo '<input type="text" id="search" name="search" value="'.s($search).'" />&nbsp;<input type="submit" value="'.get_string('search').'" /></div></form>'."\n";
 
     // Define a table showing a list of all courses
     // Note: 'fullname' is treated as special in a flexible_table. Call the column 'course_fullname' instead.
     $tablecolumns = array('shortname', 'course_fullname', 'home', 'courses');
-    $tableheaders = array(get_string('shortname', 'block_course_level'), get_string('fullname', 'block_course_level'),
-        get_string('link', 'block_course_level'), get_string('courses', 'block_course_level'));
+    $tableheaders = array(get_string('shortname', 'block_programme_level'), get_string('fullname', 'block_programme_level'),
+        get_string('link', 'block_programme_level'), get_string('courses', 'block_programme_level'));
 
     $table = new flexible_table('block-course-level-display-all-'.$course->id);
     $table->define_columns($tablecolumns);
@@ -189,7 +190,7 @@ if($tab == PROGRAMMES_VIEW) {
             $data[] = $course->shortname;
             $data[] = $course->fullname;
 
-            $link = html_writer::link(new moodle_url('/course/view.php?id='.$course->id), get_string('programme_home','block_course_level'));
+            $link = html_writer::link(new moodle_url('/course/view.php?id='.$course->id), get_string('programme_home','block_programme_level'));
 
             $data[] = $link;
 
@@ -198,7 +199,7 @@ if($tab == PROGRAMMES_VIEW) {
 
             if(!empty($progcourses)  && $progcourses->valid() ) {
                 $dlgId = $course->id;
-                $dlgTitle = html_writer::tag('div', get_string('programme_courses', 'block_course_level'), array('class' => 'dlgTitle', 'id' => 'course-'.$dlgId));
+                $dlgTitle = html_writer::tag('div', get_string('programme_courses', 'block_programme_level'), array('class' => 'dlgTitle', 'id' => 'course-'.$dlgId));
                 $links = array(); // Start with an empty list of links
                 foreach($progcourses as $progcourse) {
                     $links[] = html_writer::link(new moodle_url('/course/view.php?id='.$progcourse->id), $progcourse->fullname);
@@ -221,8 +222,8 @@ if($tab == PROGRAMMES_VIEW) {
         }
 
         // Load up relevant Javascript, passing the course id's of all of the course units displayed on the page...
-        $PAGE->requires->yui_module('moodle-block_course_level-courses',
-            'M.blocks_course_level.init_courses',
+        $PAGE->requires->yui_module('moodle-block_programme_level-courses',
+            'M.blocks_programme_level.init_courses',
             array(array('courseids' => $dlgIds)));
 
         $table->print_html();
@@ -247,7 +248,7 @@ if($tab == PROGRAMMES_VIEW) {
 
     // Search
     echo '<form action="view.php" class="searchform"><div><input type="hidden" name="id" value="'.$course->id.'" /><input type="hidden" name="tab" value="'.$tab.'" />';
-    echo '<label for="search">' . get_string('coursesearch', 'block_course_level') . ' </label>';
+    echo '<label for="search">' . get_string('coursesearch', 'block_programme_level') . ' </label>';
     echo '<input type="text" id="search" name="search" value="'.s($search).'" />&nbsp;<input type="submit" value="'.get_string('search').'" /></div></form>'."\n";
 
     $controlstable = new html_table();
@@ -257,8 +258,8 @@ if($tab == PROGRAMMES_VIEW) {
     // Define a table showing a list of all courses
     // Note: 'fullname' is treated as special in a flexible_table. Call the column 'course_fullname' instead.
     $tablecolumns = array('shortname', 'course_fullname', 'home', 'units');
-    $tableheaders = array(get_string('shortname', 'block_course_level'), get_string('fullname', 'block_course_level'),
-        get_string('link', 'block_course_level'), get_string('units', 'block_course_level'));
+    $tableheaders = array(get_string('shortname', 'block_programme_level'), get_string('fullname', 'block_programme_level'),
+        get_string('link', 'block_programme_level'), get_string('units', 'block_programme_level'));
 
     $table = new flexible_table('block-course-level-display-all-'.$course->id);
     $table->define_columns($tablecolumns);
@@ -329,7 +330,7 @@ if($tab == PROGRAMMES_VIEW) {
             $data[] = $course->shortname;
             $data[] = $course->fullname;
 
-            $link = html_writer::link(new moodle_url('/course/view.php?id='.$course->id), get_string('course_home','block_course_level'));
+            $link = html_writer::link(new moodle_url('/course/view.php?id='.$course->id), get_string('course_home','block_programme_level'));
 
             $data[] = $link;
 
@@ -338,7 +339,7 @@ if($tab == PROGRAMMES_VIEW) {
 
             if(!empty($courseunits) && $courseunits->valid()) {
                 $dlgId = $course->id;
-                $dlgTitle = html_writer::tag('div', get_string('years_and_units', 'block_course_level'), array('class' => 'dlgTitle', 'id' => 'units-'.$dlgId));
+                $dlgTitle = html_writer::tag('div', get_string('years_and_units', 'block_programme_level'), array('class' => 'dlgTitle', 'id' => 'units-'.$dlgId));
                 $links = array(); // Start with an empty list of links
                 foreach($courseunits as $courseunit) {
                     $links[] = html_writer::link(new moodle_url('/course/view.php?id='.$courseunit->id), $courseunit->fullname);
@@ -361,8 +362,8 @@ if($tab == PROGRAMMES_VIEW) {
         }
 
         // Load up relevant Javascript, passing the course id's of all of the course units displayed on the page...
-        $PAGE->requires->yui_module('moodle-block_course_level-units',
-            'M.blocks_course_level.init_units',
+        $PAGE->requires->yui_module('moodle-block_programme_level-units',
+            'M.blocks_programme_level.init_units',
             array(array('unitids' => $dlgIds)));
 
         $table->print_html();
