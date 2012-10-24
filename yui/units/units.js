@@ -1,4 +1,4 @@
-YUI.add('moodle-block_course_level-units', function(Y) {
+YUI.add('moodle-block_programme_level-units', function(Y) {
 
     var UNITSNAME = 'blocks_course_units';
 
@@ -115,11 +115,11 @@ YUI.add('moodle-block_course_level-units', function(Y) {
         }
     });
 
-    M.blocks_course_level = M.blocks_course_level || {};
-    M.blocks_course_level.init_units = function(params) {
+    M.blocks_programme_level = M.blocks_programme_level || {};
+    M.blocks_programme_level.init_units = function(params) {
         return new UNITS(params);
     }
 
 }, '@VERSION@', {
-    requires:['base','overlay', 'moodle-enrol-notification']
+    requires:['base']
 });

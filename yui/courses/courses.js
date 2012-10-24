@@ -1,6 +1,6 @@
-YUI.add('moodle-block_course_level-courses', function(Y) {
+YUI.add('moodle-block_programme_level-courses', function(Y) {
 
-    var COURSESNAME = 'blocks_course_courses';
+    var COURSESNAME = 'blocks_programme_courses';
 
     var COURSES = function() {
         COURSES.superclass.constructor.apply(this, arguments);
@@ -113,11 +113,11 @@ YUI.add('moodle-block_course_level-courses', function(Y) {
         }
     });
 
-    M.blocks_course_level = M.blocks_course_level || {};
-    M.blocks_course_level.init_courses = function(params) {
+    M.blocks_programme_level = M.blocks_programme_level || {};
+    M.blocks_programme_level.init_courses = function(params) {
         return new COURSES(params);
     }
 
 }, '@VERSION@', {
-    requires:['base','overlay', 'moodle-enrol-notification']
+    requires:['base']
 });
