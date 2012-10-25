@@ -45,12 +45,12 @@
     $activated = array();
 
     $browserow[] = new tabobject(COURSES_VIEW,
-                                 $CFG->wwwroot.'/blocks/course_level/view.php?id='.$courseid.'&amp;tab='.COURSES_VIEW,
-                                 get_string('coursesview', 'block_course_level'));
+                                 $CFG->wwwroot.'/blocks/programme_level/view.php?id='.$courseid.'&amp;tab='.COURSES_VIEW,
+                                 get_string('coursesview', 'block_programme_level'));
 
     $browserow[] = new tabobject(PROGRAMMES_VIEW,
-                                 $CFG->wwwroot.'/blocks/course_level/view.php?id='.$courseid.'&amp;tab='.PROGRAMMES_VIEW,
-                                 get_string('programmesview', 'block_course_level'));
+                                 $CFG->wwwroot.'/blocks/programme_level/view.php?id='.$courseid.'&amp;tab='.PROGRAMMES_VIEW,
+                                 get_string('programmesview', 'block_programme_level'));
 
 
     if ($tab < COURSES_VIEW || $tab > PROGRAMMES_VIEW) {   // We are on second row
