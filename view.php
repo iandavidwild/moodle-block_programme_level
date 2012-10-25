@@ -198,34 +198,52 @@ if($tab == PROGRAMMES_VIEW) {
             // Output the links to this programme's courses:
             $progcourses = $ual_mis->get_programme_courses($course->shortname, '', ' ORDER BY shortname ASC');
 
-            if(!empty($progcourses)  && $progcourses->valid() ) {
-                $dlgId = $course->id;
-                $dlgTitle = html_writer::tag('div', get_string('programme_courses', 'block_programme_level'), array('class' => 'dlgTitle', 'id' => 'course-'.$dlgId));
-                $links = array(); // Start with an empty list of links
-                foreach($progcourses as $progcourse) {
-                    $links[] = html_writer::link(new moodle_url('/course/view.php?id='.$progcourse->id), $progcourse->fullname);
+            if (!empty($progcourses)  && $progcourses->valid() ) {
+                $dlgid = $course->id;
+                $dlgtitle = html_writer::tag('div', get_string('programme_courses', 'block_programme_level'),
+                    array('class' => 'dlgTitle', 'id' => 'course-'.$dlgid));
+
+                $cellcontents = '';
+
+                $years = get_years_and_courses($progcourses);
+
+                $contentbox = '';
+
+                foreach($years as $year=>$component_courses) {
+                    $contentbox .= html_writer::tag('h4', get_string('year', 'block_programme_level').' '.$year, array('id' => 'year_heading'));
+
+                    $links = array(); // Start with an empty list of links.
+                    foreach ($component_courses as $component_course) {
+                        $links[] = html_writer::link(new moodle_url('/course/view.php?id='.$component_course->id),
+                            $component_course->shortname.' - '.$component_course->fullname,
+                            array('id' => 'course_link'));
+                    }
+                    // Implode the list of links and separate with a <br/>...
+                    $contentbox .= implode('<br/>', $links);
                 }
-                // Implode the list of links and separate with a <br/>...
-                $contentBox = implode('<br/>', $links);
-                $contentBox = html_writer::tag('div', $contentBox, array('class' => 'contentBox'));
 
-                $cellContents = html_writer::tag('div', $dlgTitle.$contentBox, array('class' => 'yui3-overlay-loading', 'id' => 'courseoverlay-' . $dlgId));
+                $contentbox = html_writer::tag('div', $contentbox, array('class' => 'contentBox'));
 
-                $data[] = $cellContents;
+                $cellcontents = html_writer::tag('div',
+                    $dlgtitle.$contentbox, array('class' => 'yui3-overlay-loading',
+                        'id' => 'courseoverlay-' . $dlgid));
+
+                $data[] = $cellcontents;
 
                 // Remember what all the course dialog ids are. There will be one per course...
-                $dlgIds[] = $dlgId;
+                $dlgids[] = $dlgid;
             } else {
                 $data[] = get_string('nothingtodisplay');
             }
 
+
             $table->add_data($data, 'row-course-'.$course->id);
         }
 
-        // Load up relevant Javascript, passing the course id's of all of the course units displayed on the page...
+        // Load up relevant Javascript, passing the course id's of all of the programme's courses displayed on the page...
         $PAGE->requires->yui_module('moodle-block_programme_level-courses',
             'M.blocks_programme_level.init_courses',
-            array(array('courseids' => $dlgIds)));
+            array(array('courseids' => $dlgids)));
 
         $table->print_html();
     }
@@ -341,23 +359,42 @@ if($tab == PROGRAMMES_VIEW) {
             // Output links to this course's units:
             $courseunits = $ual_mis->get_course_units($course->shortname, '', ' ORDER BY shortname ASC');
 
-            if(!empty($courseunits) && $courseunits->valid()) {
-                $dlgId = $course->id;
-                $dlgTitle = html_writer::tag('div', get_string('years_and_units', 'block_programme_level'), array('class' => 'dlgTitle', 'id' => 'units-'.$dlgId));
-                $links = array(); // Start with an empty list of links
-                foreach($courseunits as $courseunit) {
-                    $links[] = html_writer::link(new moodle_url('/course/view.php?id='.$courseunit->id), $courseunit->fullname);
+            if (!empty($courseunits) && $courseunits->valid()) {
+
+                $dlgid = $course->id;
+                $dlgtitle = html_writer::tag('div', get_string('years_and_units', 'block_programme_level'),
+                    array('class' => 'dlgTitle', 'id' => 'units-'.$dlgid));
+
+                $cellcontents = '';
+
+                $years = get_years_and_units($courseunits);
+
+                // Write list of years and units
+                $contentbox = '';
+                foreach($years as $year=>$units) {
+                    $contentbox .= html_writer::tag('h4', get_string('year', 'block_programme_level').' '.$year, array('id' => 'year_heading'));
+
+                    $links = array(); // Start with an empty list of links.
+                    foreach ($units as $unit) {
+                        $links[] = html_writer::link(new moodle_url('/course/view.php?id='.$unit->id),
+                            $unit->shortname.' - '.$unit->fullname,
+                            array('id' => 'unit_link'));
+                    }
+                    // Implode the list of links and separate with a <br/>...
+                    $contentbox .= implode('<br/>', $links);
                 }
-                // Implode the list of links and separate with a <br/>...
-                $contentBox = implode('<br/>', $links);
-                $contentBox = html_writer::tag('div', $contentBox, array('class' => 'contentBox'));
 
-                $cellContents = html_writer::tag('div', $dlgTitle.$contentBox, array('class' => 'yui3-overlay-loading', 'id' => 'unitoverlay-' . $dlgId));
+                $contentbox = html_writer::tag('div', $contentbox, array('class' => 'contentBox'));
 
-                $data[] = $cellContents;
+                $cellcontents .= html_writer::tag('div',
+                    $dlgtitle.$contentbox,
+                    array('class' => 'yui3-overlay-loading',
+                        'id' => 'unitoverlay-' . $dlgid));
+
+                $data[] = $cellcontents;
 
                 // Remember what all the course dialog ids are. There will be one per course...
-                $dlgIds[] = $dlgId;
+                $dlgids[] = $dlgid;
             } else {
                 $data[] = get_string('nothingtodisplay');
             }
@@ -368,7 +405,7 @@ if($tab == PROGRAMMES_VIEW) {
         // Load up relevant Javascript, passing the course id's of all of the course units displayed on the page...
         $PAGE->requires->yui_module('moodle-block_programme_level-units',
             'M.blocks_programme_level.init_units',
-            array(array('unitids' => $dlgIds)));
+            array(array('unitids' => $dlgids)));
 
         $table->print_html();
     }
@@ -398,5 +435,50 @@ function print_tabbed_table_end() {
     echo "</div></div>";
 }
 
+/**
+ * Returns an array of units with year as the key - sorted into ascending numeric order
+ *
+ * @param $courseunits
+ * @return array
+ */
+function get_years_and_units($courseunits) {
+    $result = array();
+
+    foreach ($courseunits as $courseunit) {
+        // Get 7th character from the left...
+        // TODO String functions are horribly inefficient so we might want to take a look at this.
+        $year = intval(substr($courseunit->shortname, -7, 1));
+
+        $result[$year][] = $courseunit;
+    }
+
+    // Ensure years are ultimately displayed in numerical ascending order
+    ksort($result, SORT_NUMERIC);
+
+    return $result;
+}
+
+/**
+ * Returns an array of courses with year as the key - sorted into ascending numeric order
+ *
+ * @param $progcourses
+ * @return array
+ */
+function get_years_and_courses($progcourses) {
+    $result = array();
+
+    foreach ($progcourses as $progcourse) {
+        // Get 7th character from the left...
+        // TODO String functions are horribly inefficient so we might want to take a look at this.
+        $year = intval(substr($progcourse->shortname, -7, 1));
+
+        $result[$year][] = $progcourse;
+    }
+
+    // Ensure years are ultimately displayed in numerical ascending order
+    ksort($result, SORT_NUMERIC);
+
+    return $result;
+}
 
 ?>
