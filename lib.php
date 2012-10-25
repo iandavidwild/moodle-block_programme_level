@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,6 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+// Fix bug: moving the block means the ual_api local plugin is no longer loaded. We'll need to specify the path to
+// the lib file directly. See https://moodle.org/mod/forum/discuss.php?d=197997 for more information...
+require_once($CFG->dirroot . '/local/ual_api/lib.php');
 
 /**
  * This class creates a course level tree. It shows the relationship between Moodle courses - which will be specific
@@ -31,7 +33,7 @@ class programme_level_tree implements renderable {
         if (class_exists('ual_mis')) {
             $mis = new ual_mis();
 
-            $this->courses = $mis->get_programmes_tree($USER->idnumber);
+            $this->courses = $mis->get_user_programmes_tree($USER->idnumber);
         }
 
         // TODO warn if local plugin 'ual_api' is not installed.
