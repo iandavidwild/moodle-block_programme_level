@@ -53,6 +53,7 @@ $string['fullname']              = 'Full name';
 $string['link']                  = 'Quick link';
 $string['units']                 = 'Units';
 $string['courses']               = 'Courses';
+$string['year']                  = 'Year';
 
 // Tab links:
 $string['coursesview']           = 'Courses';
