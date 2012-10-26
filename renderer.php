@@ -83,7 +83,7 @@ class block_programme_level_renderer extends plugin_renderer_base {
 
 
         $html .= html_writer::empty_tag('hr');
-        $viewprogrammes_lnk = $CFG->wwwroot.'\blocks\programme_level\view.php?id='.$this->courseid.'&tab=1';
+        $viewprogrammes_lnk = $CFG->wwwroot.'/blocks/programme_level/view.php?id='.$this->courseid.'&tab=1';
         $attributes = array();
         $html .= html_writer::link($viewprogrammes_lnk, get_string('view_all_programmes', 'block_programme_level'), $attributes);
 
