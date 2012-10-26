@@ -33,7 +33,7 @@ class programme_level_tree implements renderable {
         if (class_exists('ual_mis')) {
             $mis = new ual_mis();
 
-            $this->courses = $mis->get_user_programmes_tree($USER->idnumber);
+            $this->courses = $mis->get_user_programmes_tree($USER->username);
         }
 
         // TODO warn if local plugin 'ual_api' is not installed.
