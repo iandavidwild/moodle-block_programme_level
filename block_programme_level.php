@@ -53,13 +53,29 @@ class block_programme_level extends block_base {
     }
 
     /**
+     * Returns the attributes to set for this block
+     *
+     * This function returns an array of HTML attributes for this block including
+     * the defaults.
+     * {@link block_tree::html_attributes()} is used to get the default arguments
+     * and then we check whether the user has enabled hover expansion and add the
+     * appropriate hover class if it has.
+     *
+     * @return array An array of HTML attributes
+     */
+    function html_attributes() {
+        $attributes = parent::html_attributes();
+        $attributes['class'] .= ' course_menu';
+
+        return $attributes;
+    }
+
+    /**
      * Standard get content function returns $this->content containing the block HTML etc
      *
      * @return stdClass
      */
     public function get_content() {
-
-        global $CFG, $USER, $PAGE, $OUTPUT;
 
         if ($this->content !== NULL) {
             return $this->content;
