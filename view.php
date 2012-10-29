@@ -40,13 +40,13 @@ define('SHOW_ALL_PAGE_SIZE', 5000);
 define('COURSES_VIEW', 0);
 define('PROGRAMMES_VIEW', 1);
 
-$page         = optional_param('page', 0, PARAM_INT);                     // which page to show
-$perpage      = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT);  // how many per page
-$search       = optional_param('search','',PARAM_RAW);                    // make sure it is processed with p() or s() when sending to output!
+$page         = optional_param('page', 0, PARAM_INT);                       // which page to show
+$perpage      = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT);    // how many per page
+$search       = optional_param('search','',PARAM_RAW);                      // make sure it is processed with p() or s() when sending to output!
 
-$contextid    = optional_param('contextid', 0, PARAM_INT);                // one of this or
-$courseid     = optional_param('id', 0, PARAM_INT);                       // this are required
-$tab          = optional_param('tab', COURSES_VIEW, PARAM_INT);    // browsing either courses or programmes?
+$contextid    = optional_param('contextid', 0, PARAM_INT);                  // one of this or
+$courseid     = optional_param('id', 1, PARAM_INT);                         // Assume we're on the front page.
+$tab          = optional_param('tab', COURSES_VIEW, PARAM_INT);             // browsing either courses or programmes?
 
 $PAGE->set_url('/blocks/course_level/view.php', array(
     'page' => $page,
