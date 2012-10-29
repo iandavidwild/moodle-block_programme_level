@@ -115,6 +115,9 @@ class block_programme_level extends block_base {
 
             $parentcontext = get_context_instance_by_id($this->instance->parentcontextid);
             $courseid = get_courseid_from_context($parentcontext);
+            if(!$courseid) {
+                $courseid = 1;  // Assume we are on the site front page
+            }
             $this->content->text = $renderer->programme_level_tree($trimmode, $trimlength, $courseid);
             $this->content->footer = '';
 
