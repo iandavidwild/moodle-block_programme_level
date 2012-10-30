@@ -134,4 +134,14 @@ class block_programme_level extends block_base {
     public function instance_allow_config() {
         return false;
     }
+
+    /**
+     * Standard function - there will already be a 'sticky' course level block on a course page so prevent an
+     * editing teacher from adding one.
+     *
+     * @return bool false
+     */
+    public function instance_allow_multiple() {
+        return false;
+    }
 }
