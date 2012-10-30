@@ -80,8 +80,6 @@ class block_programme_level_renderer extends plugin_renderer_base {
         }
 
         // Add 'View all programmes' link to bottom of block...
-
-
         $html .= html_writer::empty_tag('hr');
         $viewprogrammes_lnk = $CFG->wwwroot.'/blocks/programme_level/view.php?id='.$this->courseid.'&tab=1';
         $attributes = array('class' => 'view-all');
@@ -106,9 +104,7 @@ class block_programme_level_renderer extends plugin_renderer_base {
 
         $result = '<ul>';
 
-        if(empty($tree)) {
-            $result .= html_writer::tag('li', get_string('nothingtodisplay'));
-        } else {
+        if(!empty($tree)) {
             foreach ($tree as $node) {
 
                 $course_fullname = $this->trim($node->get_fullname());
