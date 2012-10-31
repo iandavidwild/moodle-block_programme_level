@@ -33,14 +33,7 @@ require_once($CFG->dirroot . '/blocks/programme_level/lib.php');
 
 class block_programme_level_renderer extends plugin_renderer_base {
 
-    /** @var int Trim characters from the right */
-    const TRIM_RIGHT = 1;
-    /** @var int Trim characters from the left */
-    const TRIM_LEFT = 2;
-    /** @var int Trim characters from the center */
-    const TRIM_CENTER = 3;
-
-    private $trimmode = self::TRIM_RIGHT;
+    private $trimmode = block_programme_level::TRIM_RIGHT;
     private $trimlength = 50;
     private $courseid = 0;
 
@@ -146,19 +139,19 @@ class block_programme_level_renderer extends plugin_renderer_base {
         $result = $text;
 
         switch ($this->trimmode) {
-            case self::TRIM_RIGHT :
+            case block_programme_level::TRIM_RIGHT :
                 if (textlib::strlen($text)>($this->trimlength+3)) {
                     // Truncate the text to $long characters
                     $result = textlib::substr($text, 0, $this->trimlength).'...';
                 }
                 break;
-            case self::TRIM_LEFT :
+            case block_programme_level::TRIM_LEFT :
                 if (textlib::strlen($text)>($this->trimlength+3)) {
                     // Truncate the text to $long characters
                     $result = '...'.textlib::substr($text, textlib::strlen($text)-$this->trimlength, $this->trimlength);
                 }
                 break;
-            case self::TRIM_CENTER :
+            case block_programme_level::TRIM_CENTER :
                 if (textlib::strlen($text)>($this->trimlength+3)) {
                     // Truncate the text to $long characters
                     $length = ceil($this->trimlength/2);
