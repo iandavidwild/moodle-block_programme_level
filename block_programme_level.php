@@ -34,6 +34,13 @@ defined('MOODLE_INTERNAL') || die();
  */
 class block_programme_level extends block_base {
 
+    /** @var int Trim characters from the right */
+    const TRIM_RIGHT = 1;
+    /** @var int Trim characters from the left */
+    const TRIM_LEFT = 2;
+    /** @var int Trim characters from the center */
+    const TRIM_CENTER = 3;
+
     /**
      * Standard init function, sets block title and version number
      *
