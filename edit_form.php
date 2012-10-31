@@ -43,9 +43,9 @@ class block_programme_level_edit_form extends block_edit_form {
         $mform->setType('config_title', PARAM_MULTILANG);
 
         $options = array(
-            block_navigation::TRIM_RIGHT => get_string('trimmoderight', 'block_programme_level'),
-            block_navigation::TRIM_LEFT => get_string('trimmodeleft', 'block_programme_level'),
-            block_navigation::TRIM_CENTER => get_string('trimmodecentre', 'block_programme_level')
+            block_programme_level::TRIM_RIGHT => get_string('trimmoderight', 'block_programme_level'),
+            block_programme_level::TRIM_LEFT => get_string('trimmodeleft', 'block_programme_level'),
+            block_programme_level::TRIM_CENTER => get_string('trimmodecentre', 'block_programme_level')
         );
         $mform->addElement('select', 'config_trimmode', get_string('trimmode', 'block_programme_level'), $options);
         $mform->setType('config_trimmode', PARAM_INT);
