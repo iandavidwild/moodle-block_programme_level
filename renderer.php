@@ -109,7 +109,7 @@ class block_programme_level_renderer extends plugin_renderer_base {
                 $children = $node->get_children();
                 $parentids = $node->get_parentids();
 
-                if($children == null) {
+                if(empty($children)) {
                     // if this course has parents and indent>0 then display it.
                     if($indent>0) {
                         $result .= html_writer::tag('li', $content, $attributes);
