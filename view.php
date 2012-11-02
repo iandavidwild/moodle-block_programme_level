@@ -198,7 +198,7 @@ if($tab == PROGRAMMES_VIEW) {
             // Output the links to this programme's courses:
             $progcourses = $ual_mis->get_programme_courses($course->shortname, '', ' ORDER BY shortname ASC');
 
-            if (!empty($progcourses)  && $progcourses->valid() ) {
+            if (!empty($progcourses)) {
                 $dlgid = $course->id;
                 $dlgtitle = html_writer::tag('div', get_string('programme_courses', 'block_programme_level'),
                     array('class' => 'dlgTitle', 'id' => 'course-'.$dlgid));
@@ -214,8 +214,8 @@ if($tab == PROGRAMMES_VIEW) {
 
                     $links = array(); // Start with an empty list of links.
                     foreach ($component_courses as $component_course) {
-                        $links[] = html_writer::link(new moodle_url('/course/view.php?id='.$component_course->id),
-                            $component_course->shortname.' - '.$component_course->fullname,
+                        $links[] = html_writer::link(new moodle_url('/course/view.php?id='.$component_course->get_id()),
+                            $component_course->get_shortname().' - '.$component_course->get_fullname(),
                             array('id' => 'course_link'));
                     }
                     // Implode the list of links and separate with a <br/>...
@@ -359,7 +359,7 @@ if($tab == PROGRAMMES_VIEW) {
             // Output links to this course's units:
             $courseunits = $ual_mis->get_course_units($course->shortname, '', ' ORDER BY shortname ASC');
 
-            if (!empty($courseunits) && $courseunits->valid()) {
+            if (!empty($courseunits)) {
 
                 $dlgid = $course->id;
                 $dlgtitle = html_writer::tag('div', get_string('years_and_units', 'block_programme_level'),
@@ -376,8 +376,8 @@ if($tab == PROGRAMMES_VIEW) {
 
                     $links = array(); // Start with an empty list of links.
                     foreach ($units as $unit) {
-                        $links[] = html_writer::link(new moodle_url('/course/view.php?id='.$unit->id),
-                            $unit->shortname.' - '.$unit->fullname,
+                        $links[] = html_writer::link(new moodle_url('/course/view.php?id='.$unit->get_id()),
+                            $unit->get_shortname().' - '.$unit->get_fullname(),
                             array('id' => 'unit_link'));
                     }
                     // Implode the list of links and separate with a <br/>...
@@ -447,7 +447,7 @@ function get_years_and_units($courseunits) {
     foreach ($courseunits as $courseunit) {
         // Get 7th character from the left...
         // TODO String functions are horribly inefficient so we might want to take a look at this.
-        $year = intval(substr($courseunit->shortname, -7, 1));
+        $year = intval(substr($courseunit->get_shortname(), -7, 1));
 
         $result[$year][] = $courseunit;
     }
@@ -470,7 +470,7 @@ function get_years_and_courses($progcourses) {
     foreach ($progcourses as $progcourse) {
         // Get 7th character from the left...
         // TODO String functions are horribly inefficient so we might want to take a look at this.
-        $year = intval(substr($progcourse->shortname, -7, 1));
+        $year = intval(substr($progcourse->get_shortname(), -7, 1));
 
         $result[$year][] = $progcourse;
     }
