@@ -101,6 +101,9 @@ class block_programme_level_renderer extends plugin_renderer_base {
             foreach ($tree as $node) {
 
                 $course_fullname = $this->trim($node->get_fullname());
+                // Fix to bug UALMOODLE-58: look for ampersand in fullname and replace it with entity
+                $course_fullname = preg_replace('/&(?![#]?[a-z0-9]+;)/i', "&amp;$1", $course_fullname);
+
                 $attributes = array('title'=>$course_fullname);
                 $moodle_url = $CFG->wwwroot.'/course/view.php?id='.$node->get_id();
                 $content = html_writer::link($moodle_url, $course_fullname, $attributes);
