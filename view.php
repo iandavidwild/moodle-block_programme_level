@@ -180,7 +180,7 @@ if($tab == PROGRAMMES_VIEW) {
 
         $programmesprinted = array();
 
-        $dlgIds = array();
+        $dlgids = array();
 
         foreach ($programmelist as $course) {
             if (in_array($course->id, $programmesprinted)) {
@@ -205,22 +205,18 @@ if($tab == PROGRAMMES_VIEW) {
 
                 $cellcontents = '';
 
-                $years = get_years_and_courses($progcourses);
-
                 $contentbox = '';
 
-                foreach($years as $year=>$component_courses) {
-                    $contentbox .= html_writer::tag('h4', get_string('year', 'block_programme_level').' '.$year, array('id' => 'year_heading'));
+                $links = array(); // Start with an empty list of links.
 
-                    $links = array(); // Start with an empty list of links.
-                    foreach ($component_courses as $component_course) {
-                        $links[] = html_writer::link(new moodle_url('/course/view.php?id='.$component_course->get_id()),
-                            $component_course->get_shortname().' - '.$component_course->get_fullname(),
-                            array('id' => 'course_link'));
-                    }
-                    // Implode the list of links and separate with a <br/>...
-                    $contentbox .= implode('<br/>', $links);
+                foreach($progcourses as $progcourse) {
+                    $links[] = html_writer::link(new moodle_url('/course/view.php?id='.$progcourse->get_id()),
+                        $progcourse->get_shortname().' - '.$progcourse->get_fullname(),
+                        array('id' => 'course_link'));
                 }
+
+                // Implode the list of links and separate with a <br/>...
+                $contentbox .= implode('<br/>', $links);
 
                 $contentbox = html_writer::tag('div', $contentbox, array('class' => 'contentBox'));
 
@@ -341,7 +337,7 @@ if($tab == PROGRAMMES_VIEW) {
 
         $coursesprinted = array();
 
-        $dlgIds = array();
+        $dlgids = array();
 
         foreach ($courselist as $course) {
             if (in_array($course->id, $coursesprinted)) {
@@ -349,17 +345,19 @@ if($tab == PROGRAMMES_VIEW) {
             }
             $data = array();
 
+            $link = html_writer::link(new moodle_url('/course/view.php?id='.$course->id),
+                                          get_string('course_home','block_programme_level'));
+
             $data[] = $course->shortname;
             $data[] = $course->fullname;
 
-            $link = html_writer::link(new moodle_url('/course/view.php?id='.$course->id), get_string('course_home','block_programme_level'));
-
             $data[] = $link;
 
-            // Output links to this course's units:
-            $courseunits = $ual_mis->get_course_units($course->shortname, '', ' ORDER BY shortname ASC');
+            // Output links to this course's units.
+            $course_code_no_year = substr($course->shortname, 0, 8).'?'.substr($course->shortname,-6, 6);
+            $courseyears = $ual_mis->get_course_years_units($course_code_no_year, '', ' ORDER BY shortname ASC');
 
-            if (!empty($courseunits)) {
+            if (!empty($courseyears)) {
 
                 $dlgid = $course->id;
                 $dlgtitle = html_writer::tag('div', get_string('years_and_units', 'block_programme_level'),
@@ -367,12 +365,18 @@ if($tab == PROGRAMMES_VIEW) {
 
                 $cellcontents = '';
 
-                $years = get_years_and_units($courseunits);
-
                 // Write list of years and units
                 $contentbox = '';
-                foreach($years as $year=>$units) {
-                    $contentbox .= html_writer::tag('h4', get_string('year', 'block_programme_level').' '.$year, array('id' => 'year_heading'));
+                foreach($courseyears as $courseyear=>$units) {
+                    $year_homepage = $ual_mis->get_course_from_shortname($courseyear);
+                    if($year_homepage != null) {
+                        $year = intval(substr($year_homepage->shortname, -7, 1));
+                        // The course fullname should contain the 'Course years' full title (which includes which year it is)
+                        $homepagelink = html_writer::link(new moodle_url('/course/view.php?id='.$year_homepage->id), $year_homepage->fullname);
+                        $contentbox .= html_writer::tag('h4', $homepagelink, array('id' => 'year_heading'));
+                    } else {
+                        $contentbox .= html_writer::tag('h4', get_string('year', 'block_programme_level').' '.intval($year), array('id' => 'year_heading'));
+                    }
 
                     $links = array(); // Start with an empty list of links.
                     foreach ($units as $unit) {
@@ -433,52 +437,6 @@ echo $OUTPUT->footer();
  */
 function print_tabbed_table_end() {
     echo "</div></div>";
-}
-
-/**
- * Returns an array of units with year as the key - sorted into ascending numeric order
- *
- * @param $courseunits
- * @return array
- */
-function get_years_and_units($courseunits) {
-    $result = array();
-
-    foreach ($courseunits as $courseunit) {
-        // Get 7th character from the left...
-        // TODO String functions are horribly inefficient so we might want to take a look at this.
-        $year = intval(substr($courseunit->get_shortname(), -7, 1));
-
-        $result[$year][] = $courseunit;
-    }
-
-    // Ensure years are ultimately displayed in numerical ascending order
-    ksort($result, SORT_NUMERIC);
-
-    return $result;
-}
-
-/**
- * Returns an array of courses with year as the key - sorted into ascending numeric order
- *
- * @param $progcourses
- * @return array
- */
-function get_years_and_courses($progcourses) {
-    $result = array();
-
-    foreach ($progcourses as $progcourse) {
-        // Get 7th character from the left...
-        // TODO String functions are horribly inefficient so we might want to take a look at this.
-        $year = intval(substr($progcourse->get_shortname(), -7, 1));
-
-        $result[$year][] = $progcourse;
-    }
-
-    // Ensure years are ultimately displayed in numerical ascending order
-    ksort($result, SORT_NUMERIC);
-
-    return $result;
 }
 
 ?>
