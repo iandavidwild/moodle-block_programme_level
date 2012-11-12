@@ -210,7 +210,7 @@ if($tab == PROGRAMMES_VIEW) {
                 $links = array(); // Start with an empty list of links.
 
                 foreach($progcourses as $progcourse) {
-                    $links[] = html_writer::link(new moodle_url('/course/view.php?id='.$progcourse->get_id()),
+                    $links[] = html_writer::link(new moodle_url('/course/view.php?id='.$progcourse->get_moodle_course_id()),
                         $progcourse->get_shortname().' - '.$progcourse->get_fullname(),
                         array('id' => 'course_link'));
                 }
@@ -380,7 +380,7 @@ if($tab == PROGRAMMES_VIEW) {
 
                     $links = array(); // Start with an empty list of links.
                     foreach ($units as $unit) {
-                        $links[] = html_writer::link(new moodle_url('/course/view.php?id='.$unit->get_id()),
+                        $links[] = html_writer::link(new moodle_url('/course/view.php?id='.$unit->get_moodle_course_id()),
                             $unit->get_shortname().' - '.$unit->get_fullname(),
                             array('id' => 'unit_link'));
                     }
