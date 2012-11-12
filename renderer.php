@@ -105,18 +105,18 @@ class block_programme_level_renderer extends plugin_renderer_base {
                 $course_fullname = preg_replace('/&(?![#]?[a-z0-9]+;)/i', "&amp;$1", $course_fullname);
 
                 $attributes = array('title'=>$course_fullname);
-                $moodle_url = $CFG->wwwroot.'/course/view.php?id='.$node->get_id();
+                $moodle_url = $CFG->wwwroot.'/course/view.php?id='.$node->get_moodle_course_id();
                 $content = html_writer::link($moodle_url, $course_fullname, $attributes);
                 $attributes = array('yuiConfig'=>json_encode($yuiconfig));
 
                 $children = $node->get_children();
-                $parentids = $node->get_parentids();
+                $parents = $node->get_parents();
 
                 if(empty($children)) {
                     // if this course has parents and indent>0 then display it.
                     if($indent>0) {
                         $result .= html_writer::tag('li', $content, $attributes);
-                    } elseif (empty($parentids)) {
+                    } elseif (empty($parents)) {
                         $result .= html_writer::tag('li', $content, $attributes);
                     }
 
