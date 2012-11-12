@@ -35,10 +35,26 @@ class programme_level_tree implements renderable {
 
             $ual_username = $mis->get_ual_username($USER->username);
 
-            $this->courses = $mis->get_user_programmes_tree($ual_username);
+            $programmes = $mis->get_user_programmes($ual_username);
+
+            $this->courses = $this->construct_tree_view($programmes);
+
         }
 
         // TODO warn if local plugin 'ual_api' is not installed.
+    }
+
+    private function construct_tree_view($programmes) {
+        // Create a reference array of programmes
+        $reference_programmes = array();
+        if(!empty($programmes)) {
+            foreach($programmes as $programme) {
+                $programme_code = $programme->get_aos_code().$programme->get_aos_period().$programme->get_acad_period();
+                $reference_programmes[$programme_code] = $programme;
+            }
+        }
+
+        return $reference_programmes;
     }
 }
 
