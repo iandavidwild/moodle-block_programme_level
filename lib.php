@@ -45,12 +45,20 @@ class programme_level_tree implements renderable {
     }
 
     private function construct_tree_view($programmes) {
+        global $USER;
+
         // Create a reference array of programmes
-        $reference_programmes = array();
-        if(!empty($programmes)) {
-            foreach($programmes as $programme) {
-                $programme_code = $programme->get_aos_code().$programme->get_aos_period().$programme->get_acad_period();
-                $reference_programmes[$programme_code] = $programme;
+
+        if (class_exists('ual_mis')) {
+            $mis = new ual_mis();
+
+            $reference_programmes = array();
+            if(!empty($programmes)) {
+                foreach($programmes as $programme) {
+                    $programme_code = $programme->get_aos_code().$programme->get_aos_period().$programme->get_acad_period();
+                    $programme->set_user_enrolled($mis->get_enrolled($USER->id, $programme->get_moodle_course_id()));
+                    $reference_programmes[$programme_code] = $programme;
+                }
             }
         }
 
