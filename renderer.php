@@ -105,9 +105,14 @@ class block_programme_level_renderer extends plugin_renderer_base {
                 $course_fullname = preg_replace('/&(?![#]?[a-z0-9]+;)/i', "&amp;$1", $course_fullname);
 
                 $attributes = array('title'=>$course_fullname);
-                $moodle_url = $CFG->wwwroot.'/course/view.php?id='.$node->get_moodle_course_id();
-                $content = html_writer::link($moodle_url, $course_fullname, $attributes);
-                $attributes = array('yuiConfig'=>json_encode($yuiconfig));
+                if($node->get_user_enrolled() == true) {
+                    $moodle_url = $CFG->wwwroot.'/course/view.php?id='.$node->get_moodle_course_id();
+                    $content = html_writer::link($moodle_url, $course_fullname, $attributes);
+                } else {
+                    // Display the name but it's not clickable...
+                    // TODO make this a configuration option...
+                    $content = html_writer::tag('i', $course_fullname);
+                }
 
                 $children = $node->get_children();
                 $parents = $node->get_parents();
