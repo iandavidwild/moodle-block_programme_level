@@ -83,6 +83,7 @@ class block_programme_level extends block_base {
      * @return stdClass
      */
     public function get_content() {
+        global $COURSE;
 
         if ($this->content !== NULL) {
             return $this->content;
@@ -120,8 +121,7 @@ class block_programme_level extends block_base {
 
             $renderer = $this->page->get_renderer('block_programme_level');
 
-            $parentcontext = get_context_instance_by_id($this->instance->parentcontextid);
-            $courseid = get_courseid_from_context($parentcontext);
+            $courseid = $COURSE->id;
             if(!$courseid) {
                 $courseid = 1;  // Assume we are on the site front page
             }
