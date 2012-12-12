@@ -54,6 +54,7 @@ $string['link']                  = 'Quick link';
 $string['units']                 = 'Units';
 $string['courses']               = 'Courses';
 $string['year']                  = 'Year';
+$string['year_unknown']          = 'Year unknown (data missing from IDM)';
 
 // Tab links:
 $string['coursesview']           = 'Courses';
