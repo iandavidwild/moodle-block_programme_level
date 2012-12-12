@@ -370,7 +370,7 @@ if($tab == PROGRAMMES_VIEW) {
                         $homepagelink = html_writer::link(new moodle_url('/course/view.php?id='.$year_homepage->id), $year_homepage->fullname);
                         $contentbox .= html_writer::tag('h4', $homepagelink, array('id' => 'year_heading'));
                     } else {
-                        $contentbox .= html_writer::tag('h4', get_string('year', 'block_programme_level').' '.intval($year), array('id' => 'year_heading'));
+                        $contentbox .= html_writer::tag('h4', get_string('year_unknown', 'block_programme_level'), array('id' => 'year_heading'));
                     }
 
                     $links = array(); // Start with an empty list of links.
