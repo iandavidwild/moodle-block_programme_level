@@ -99,32 +99,36 @@ class block_programme_level_renderer extends plugin_renderer_base {
 
         if(!empty($tree)) {
             foreach ($tree as $node) {
+                $visible = $node->get_visible();
 
                 $course_fullname = $this->trim($node->get_fullname());
                 // Fix to bug UALMOODLE-58: look for ampersand in fullname and replace it with entity
                 $course_fullname = preg_replace('/&(?![#]?[a-z0-9]+;)/i', "&amp;$1", $course_fullname);
 
                 $attributes = array('title'=>$course_fullname);
-                if($node->get_user_enrolled() == true) {
+                $content = '';
+
+                if(($node->get_user_enrolled() == true) && ($visible == true)) {
                     $moodle_url = $CFG->wwwroot.'/course/view.php?id='.$node->get_moodle_course_id();
-                    $content = html_writer::link($moodle_url, $course_fullname, $attributes);
+                    $content .= html_writer::link($moodle_url, $course_fullname, $attributes);
                 } else {
                     // Display the name but it's not clickable...
                     // TODO make this a configuration option...
-                    $content = html_writer::tag('i', $course_fullname);
+                    $content .= html_writer::tag('i', $course_fullname);
                 }
 
                 $children = $node->get_children();
                 $parents = $node->get_parents();
 
                 if(empty($children)) {
-                    // if this course has parents and indent>0 then display it.
-                    if($indent>0) {
-                        $result .= html_writer::tag('li', $content, $attributes);
-                    } elseif (empty($parents)) {
-                        $result .= html_writer::tag('li', $content, $attributes);
+                    if($visible) {
+                        // if this course has parents and indent>0 then display it.
+                        if($indent>0) {
+                            $result .= html_writer::tag('li', $content, $attributes);
+                        } elseif (empty($parents)) {
+                            $result .= html_writer::tag('li', $content, $attributes);
+                        }
                     }
-
                 } else {
                     // if this has parents OR it doesn't have parents or children then we need to display it...???
                     $result .= html_writer::tag('li', $content.$this->htmllize_tree($children, $indent+1), $attributes);
