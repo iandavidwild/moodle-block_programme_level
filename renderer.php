@@ -79,7 +79,7 @@ class block_programme_level_renderer extends plugin_renderer_base {
         $html .= html_writer::link($viewprogrammes_lnk, get_string('view_all_programmes', 'block_programme_level').$span, $attributes);
 
         if(!$displayed_something) {
-            $html = $this->output->box(get_string('noprogrammes', 'block_programme_level'));
+            $html .= $this->output->box(get_string('noprogrammes', 'block_programme_level'));
         }
 
         return $html;
