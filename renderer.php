@@ -61,15 +61,14 @@ class block_programme_level_renderer extends plugin_renderer_base {
 
         $module = array('name'=>'block_programme_level', 'fullpath'=>'/blocks/programme_level/module.js', 'requires'=>array('yui2-treeview'));
 
-        if (empty($tree) ) {
-            $html = $this->output->box(get_string('noprogrammes', 'block_programme_level'));
-        } else {
-
+        $displayed_something = false;
+        if (!empty($tree->courses) ){
             $htmlid = 'programme_level_tree_'.uniqid();
             $this->page->requires->js_init_call('M.block_programme_level.init_tree', array(false, $htmlid));
             $html = '<div id="'.$htmlid.'">';
             $html .= $this->htmllize_tree($tree->courses);
             $html .= '</div>';
+            $displayed_something = true;
         }
 
         // Add 'View all programmes' link to bottom of block...
@@ -78,6 +77,10 @@ class block_programme_level_renderer extends plugin_renderer_base {
         $attributes = array('class' => 'view-all');
         $span = html_writer::tag('span', '');
         $html .= html_writer::link($viewprogrammes_lnk, get_string('view_all_programmes', 'block_programme_level').$span, $attributes);
+
+        if(!$displayed_something) {
+            $html = $this->output->box(get_string('noprogrammes', 'block_programme_level'));
+        }
 
         return $html;
     }
