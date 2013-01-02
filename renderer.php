@@ -61,6 +61,8 @@ class block_programme_level_renderer extends plugin_renderer_base {
 
         $module = array('name'=>'block_programme_level', 'fullpath'=>'/blocks/programme_level/module.js', 'requires'=>array('yui2-treeview'));
 
+        $html = ""; // Start with an empty string.
+
         $displayed_something = false;
         if (!empty($tree->courses) ){
             $htmlid = 'programme_level_tree_'.uniqid();
@@ -74,7 +76,7 @@ class block_programme_level_renderer extends plugin_renderer_base {
         if(!$displayed_something) {
             $html .= $this->output->box(get_string('noprogrammes', 'block_programme_level'));
         }
-        
+
         // Add 'View all programmes' link to bottom of block...
         $html .= html_writer::empty_tag('hr');
         $viewprogrammes_lnk = $CFG->wwwroot.'/blocks/programme_level/view.php?id='.$this->courseid.'&tab=1';
