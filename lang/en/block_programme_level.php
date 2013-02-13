@@ -66,3 +66,6 @@ $string['programme_home']        = 'Programme home';
 $string['years_and_units']       = 'Show units';
 $string['programme_courses']     = 'Show courses';
 
+// User capabilities
+$string['programme_level:can_edit'] = 'Can edit';
+
