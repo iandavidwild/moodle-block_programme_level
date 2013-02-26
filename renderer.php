@@ -36,15 +36,17 @@ class block_programme_level_renderer extends plugin_renderer_base {
     private $trimmode = block_programme_level::TRIM_RIGHT;
     private $trimlength = 50;
     private $courseid = 0;
+    private $showhiddencourses = false;
 
     /**
      * Prints programme level tree view
      * @return string
      */
-    public function programme_level_tree($trimmode, $trimlength, $courseid) {
+    public function programme_level_tree($trimmode, $trimlength, $courseid, $showhiddencourses) {
         $this->trimmode = $trimmode;
         $this->trimlength = $trimlength;
         $this->courseid = $courseid;
+        $this->showhiddencourses = $showhiddencourses;
 
         return $this->render(new programme_level_tree);
     }
@@ -119,14 +121,18 @@ class block_programme_level_renderer extends plugin_renderer_base {
                 } else {
                     // Display the name but it's not clickable...
                     // TODO make this a configuration option...
-                    $content .= html_writer::tag('i', $course_fullname);
+                    $i_attributes = array();
+                	if($this->showhiddencourses) {
+                		$i_attributes['class'] = 'hidden';
+                	}
+                    $content .= html_writer::tag('i', $course_fullname, $i_attributes);
                 }
 
                 $children = $node->get_children();
                 $parents = $node->get_parents();
 
                 if(empty($children)) {
-                    if($visible) {
+                    if($visible || $this->showhiddencourses) {
                         // if this course has parents and indent>0 then display it.
                         if($indent>0) {
                             $result .= html_writer::tag('li', $content, $attributes);
