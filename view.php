@@ -145,7 +145,7 @@ if($tab == PROGRAMMES_VIEW) {
 
     $table->initialbars(true);
 
-    $ual_mis = new ual_mis;
+    $ual_api = ual_api::getInstance();
 
     // List of programmes at the current visible page - paging makes it relatively short
 
@@ -167,11 +167,11 @@ if($tab == PROGRAMMES_VIEW) {
 
     $programmelist = array();
 
-    $totalcount = $ual_mis->get_programme_count($filter);
+    $totalcount = $ual_api->get_programme_count($filter);
 
     $table->pagesize($perpage, $totalcount);
 
-    $programmelist = $ual_mis->get_programme_range($table->get_page_start(), $table->get_page_size(), $filter, $sort);
+    $programmelist = $ual_api->get_programme_range($table->get_page_start(), $table->get_page_size(), $filter, $sort);
 
     if ($totalcount < 1) {
         echo $OUTPUT->heading(get_string('nothingtodisplay'));
@@ -194,7 +194,7 @@ if($tab == PROGRAMMES_VIEW) {
                 $course->fullname);
 
             // Output the links to this programme's courses:
-            $progcourses = $ual_mis->get_programme_courses($course->idnumber, '', ' ORDER BY idnumber ASC');
+            $progcourses = $ual_api->get_programme_courses($course->idnumber, '', ' ORDER BY idnumber ASC');
 
             if (!empty($progcourses)) {
                 $dlgid = $course->id;
@@ -302,7 +302,7 @@ if($tab == PROGRAMMES_VIEW) {
 
     // List of courses at the current visible page - paging makes it relatively short
 
-    $ual_mis = new ual_mis;
+    $ual_api = ual_api::getInstance();
 
     // Display ordering
     $sort = $table->get_sql_sort();
@@ -322,11 +322,11 @@ if($tab == PROGRAMMES_VIEW) {
 
     $courselist = array();
 
-    $totalcount = $ual_mis->get_course_count($filter);
+    $totalcount = $ual_api->get_course_count($filter);
 
     $table->pagesize($perpage, $totalcount);
 
-    $courselist = $ual_mis->get_course_range($table->get_page_start(), $table->get_page_size(), $filter, $sort);
+    $courselist = $ual_api->get_course_range($table->get_page_start(), $table->get_page_size(), $filter, $sort);
 
     if ($totalcount < 1) {
         echo $OUTPUT->heading(get_string('nothingtodisplay'));
@@ -350,7 +350,7 @@ if($tab == PROGRAMMES_VIEW) {
 
             // Output links to this course's units.
             $course_code_no_year = substr($course->idnumber, 0, 8).'?'.substr($course->idnumber,-6, 6);
-            $courseyears = $ual_mis->get_course_years_units($course_code_no_year, '', ' ORDER BY idnumber ASC');
+            $courseyears = $ual_api->get_course_years_units($course_code_no_year, '', ' ORDER BY idnumber ASC');
 
             if (!empty($courseyears)) {
 
@@ -363,7 +363,7 @@ if($tab == PROGRAMMES_VIEW) {
                 // Write list of years and units
                 $contentbox = '';
                 foreach($courseyears as $courseyear=>$units) {
-                    $year_homepage = $ual_mis->get_course_from_idnumber($courseyear);
+                    $year_homepage = $ual_api->get_course_from_idnumber($courseyear);
                     if($year_homepage != null) {
                         $year = intval(substr($year_homepage->idnumber, -7, 1));
                         // The course fullname should contain the 'Course years' full title (which includes which year it is)

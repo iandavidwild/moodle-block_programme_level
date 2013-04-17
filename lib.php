@@ -29,13 +29,13 @@ class programme_level_tree implements renderable {
         global $USER, $CFG;
         $this->context = get_context_instance(CONTEXT_USER, $USER->id);
 
+        $api = ual_api::getInstance();
         // is ual_mis class loaded?
-        if (class_exists('ual_mis')) {
-            $mis = new ual_mis();
+        if (isset($api)) {
 
-            $ual_username = $mis->get_ual_username($USER->username);
+            $ual_username = $api->get_ual_username($USER->username);
 
-            $programmes = $mis->get_user_programmes($ual_username);
+            $programmes = $api->get_user_programmes($ual_username);
 
             $this->courses = $this->construct_tree_view($programmes);
 
@@ -49,14 +49,13 @@ class programme_level_tree implements renderable {
 
         // Create a reference array of programmes
 
-        if (class_exists('ual_mis')) {
-            $mis = new ual_mis();
-
+        $api = ual_api::getInstance();
+        if(isset($api)) {
             $reference_programmes = array();
             if(!empty($programmes)) {
                 foreach($programmes as $programme) {
                     $programme_code = $programme->get_aos_code().$programme->get_aos_period().$programme->get_acad_period();
-                    $programme->set_user_enrolled($mis->get_enrolled($USER->id, $programme->get_moodle_course_id()));
+                    $programme->set_user_enrolled($api->get_enrolled($USER->id, $programme->get_moodle_course_id()));
                     $reference_programmes[$programme_code] = $programme;
                 }
             }
