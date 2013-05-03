@@ -19,7 +19,7 @@
  *
  * @package    block
  * @subpackage programme_level
- * @copyright  2012-13 University of London Computer Centre
+ * @copyright  2012 University of London Computer Centre
  * @author     Ian Wild {@link http://moodle.org/user/view.php?id=325899}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -94,7 +94,6 @@ class block_programme_level extends block_base {
 
         $trimmode = 1;
         $trimlength = 50;
-        $showhiddencourses = true;
 
         if (!empty($this->config->trimmode)) {
             $trimmode = (int)$this->config->trimmode;
@@ -103,10 +102,6 @@ class block_programme_level extends block_base {
         if (!empty($this->config->trimlength)) {
             $trimlength = (int)$this->config->trimlength;
         }
-        
-        // Do we show hidden courses?
-        $context = get_context_instance(CONTEXT_SYSTEM);
-        $showhiddencourses = has_capability('block/programme_level:show_hidden_courses', $context);
 
         // load userdefined title and make sure it's never empty
         if (empty($this->config->title)) {
@@ -130,7 +125,7 @@ class block_programme_level extends block_base {
             if(!$courseid) {
                 $courseid = 1;  // Assume we are on the site front page
             }
-            $this->content->text = $renderer->programme_level_tree($trimmode, $trimlength, $courseid, $showhiddencourses);
+            $this->content->text = $renderer->programme_level_tree($trimmode, $trimlength, $courseid);
             $this->content->footer = '';
 
         }
@@ -155,35 +150,5 @@ class block_programme_level extends block_base {
      */
     public function instance_allow_multiple() {
         return false;
-    }
-
-    /**
-     * The 'My Moodle' block cannot be hidden by default as it is integral to
-     * the navigation of Moodle.
-     *
-     * @return false
-     */
-    function  instance_can_be_hidden() {
-        return false;
-    }
-
-    /**
-     * An instance can't be docked for the same reasons as for instance_can_be_hidden
-     *
-     * @return bool true or false depending on whether the instance can be docked or not.
-     */
-    function instance_can_be_docked() {
-        return false;
-    }
-
-    /**
-     * Don't allow anyone other than an administrator to delete this block as it's integral to
-     * the navigation of Moodle.
-     *
-     * @return boolean
-     */
-    function user_can_edit() {
-        $context = get_context_instance(CONTEXT_SYSTEM);
-        return (has_capability('block/programme_level:can_edit', $context));
     }
 }
