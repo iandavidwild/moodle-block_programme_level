@@ -66,3 +66,5 @@ $string['programme_home']        = 'Programme home';
 $string['years_and_units']       = 'Show units';
 $string['programme_courses']     = 'Show courses';
 
+// Capabilities
+$string['programme_level:show_hidden_courses'] = 'Show hidden courses';
