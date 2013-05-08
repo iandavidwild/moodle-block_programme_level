@@ -36,15 +36,16 @@ class block_programme_level_renderer extends plugin_renderer_base {
     private $trimmode = block_programme_level::TRIM_RIGHT;
     private $trimlength = 50;
     private $courseid = 0;
-
+    private $showhiddencourses = true;
     /**
      * Prints programme level tree view
      * @return string
      */
-    public function programme_level_tree($trimmode, $trimlength, $courseid) {
+    public function programme_level_tree($trimmode, $trimlength, $courseid, $showhiddencourses) {
         $this->trimmode = $trimmode;
         $this->trimlength = $trimlength;
         $this->courseid = $courseid;
+        $this->showhiddencourses = $showhiddencourses;
 
         return $this->render(new programme_level_tree);
     }
@@ -104,7 +105,12 @@ class block_programme_level_renderer extends plugin_renderer_base {
 
         if(!empty($tree)) {
             foreach ($tree as $node) {
+
+                // Is this node visible?
                 $visible = $node->get_visible();
+                if(!$visible) {
+                    $visible = $this->showhiddencourses;
+                }
 
                 $course_fullname = $this->trim($node->get_fullname());
                 // Fix to bug UALMOODLE-58: look for ampersand in fullname and replace it with entity
