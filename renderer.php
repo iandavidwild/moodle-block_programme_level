@@ -125,7 +125,6 @@ class block_programme_level_renderer extends plugin_renderer_base {
                 }
 
                 $children = $node->get_children();
-                $parents = $node->get_parents();
 
                 if(strlen($content) > 0) {
                     if(empty($children)) {
@@ -141,8 +140,6 @@ class block_programme_level_renderer extends plugin_renderer_base {
                         // if this has parents OR it doesn't have parents or children then we need to display it...???
                         $result .= html_writer::tag('li', $content.$this->htmllize_tree($children, $indent+1), $attributes);
                     }
-                } else {
-                    $result .= $this->htmllize_tree($children, $indent+1);
                 }
             }
         }
