@@ -127,18 +127,22 @@ class block_programme_level_renderer extends plugin_renderer_base {
                 $children = $node->get_children();
                 $parents = $node->get_parents();
 
-                if(empty($children)) {
-                    if($visible) {
-                        // if this course has parents and indent>0 then display it.
-                        if($indent>0) {
-                            $result .= html_writer::tag('li', $content, $attributes);
-                        } elseif (empty($parents)) {
-                            $result .= html_writer::tag('li', $content, $attributes);
+                if($strlen($content) > 0) {
+                    if(empty($children)) {
+                        if($visible) {
+                            // if this course has parents and indent>0 then display it.
+                            if($indent>0) {
+                                $result .= html_writer::tag('li', $content, $attributes);
+                            } elseif (empty($parents)) {
+                                $result .= html_writer::tag('li', $content, $attributes);
+                            }
                         }
+                    } else {
+                        // if this has parents OR it doesn't have parents or children then we need to display it...???
+                        $result .= html_writer::tag('li', $content.$this->htmllize_tree($children, $indent+1), $attributes);
                     }
                 } else {
-                    // if this has parents OR it doesn't have parents or children then we need to display it...???
-                    $result .= html_writer::tag('li', $content.$this->htmllize_tree($children, $indent+1), $attributes);
+                    $result .= $this->htmllize_tree($children, $indent+1);
                 }
             }
         }
