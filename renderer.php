@@ -122,10 +122,6 @@ class block_programme_level_renderer extends plugin_renderer_base {
                 if(($node->get_user_enrolled() == true) && ($visible == true)) {
                     $moodle_url = $CFG->wwwroot.'/course/view.php?id='.$node->get_moodle_course_id();
                     $content .= html_writer::link($moodle_url, $course_fullname, $attributes);
-                } else {
-                    // Display the name but it's not clickable...
-                    // TODO make this a configuration option...
-                    $content .= html_writer::tag('i', $course_fullname);
                 }
 
                 $children = $node->get_children();
